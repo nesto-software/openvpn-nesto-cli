@@ -89,7 +89,7 @@ do
     "3") showStatus ;;
 	"s") showStatus ;;
 	"S") showStatus ;;
-	"4") configure ;;
+    "4") configure ;;
     "q") exit                      ;;
     "Q") exit   					;; 
     esac
