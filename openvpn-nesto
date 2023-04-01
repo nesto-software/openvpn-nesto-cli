@@ -1,0 +1,96 @@
+#!/bin/bash
+
+config_path=/home/"$USER"/.config/openvpn.nesto/path.conf
+connect () {
+    if ! test -f "$config_path"; then
+	    read -p "Enter path to config file (.ovpn): " config_file
+            config_file="${config_file/#\~/$HOME}"
+	    mkdir -p /home/"$USER"/.config/openvpn.nesto/
+	    echo "$config_file" > /home/"$USER"/.config/openvpn.nesto/path.conf
+    elif config_file=`cat /home/"$USER"/.config/openvpn.nesto/path.conf`; then
+	    if ! test -f "$config_file"; then
+		    echo "Cannot find config file in ${config_file}"
+		    rm /home/"$USER"/.config/openvpn.nesto/path.conf
+		    connect
+	    fi
+    fi 
+    if openvpn3 session-start --config $config_file | grep -q "Session path:"; then
+	    echo "Connected!"
+            echo "------------------------------" 
+    else
+	    echo "Error, could not connect"
+            echo "------------------------------" 
+    fi
+}
+
+disconnect () {
+    session_path=$(openvpn3 sessions-list | grep "Path:" | awk '{print $2}')
+    if openvpn3 session-manage -D --session-path $session_path | grep -q "Initiated session shutdown."; then
+	    echo "Disconnected!"
+            echo "------------------------------" 
+    else
+	    echo "Error, could not disconnect"
+            echo "------------------------------" 
+    fi
+}
+
+showStatus () {
+    if openvpn3 sessions-list | grep -q "Status: Connection, Client connected"; then
+        echo "CONNECTED ✓"
+        openvpn3 sessions-list
+    else
+        echo "DISCONNECTED ✕"
+        openvpn3 sessions-list
+        if openvpn3 sessions-list | grep -q "No sessions available"; then
+            echo "------------------------------" 
+        fi
+    fi
+}
+
+configure () {
+    echo "Your current config file is: "
+    cat $config_path
+    read -p "Enter path to new config file (.ovpn): " config_file
+    config_file="${config_file/#\~/$HOME}"
+    mkdir -p /home/"$USER"/.config/openvpn.nesto/
+    echo "$config_file" > /home/"$USER"/.config/openvpn.nesto/path.conf
+    echo "Your new config file is: "
+    cat $config_path
+    echo "------------------------------" 
+}
+
+
+cat<<EOF
+==============================
+____ ___  ____ _  _ _  _ ___  _  _    _  _ ____ ____ ___ ____ 
+|  | |__] |___ |\ | |  | |__] |\ |    |\ | |___ [__   |  |  | 
+|__| |    |___ | \|  \/  |    | \|    | \| |___ ___]  |  |__| 
+                                                              
+------------------------------
+Please enter your choice:
+
+Connect		(1)
+Disconnect	(2)
+Status		(3)
+Configure	(4)
+		(q)uit
+------------------------------
+EOF
+while :
+do
+    read -n1 -s
+    case "$REPLY" in
+    "1") connect ;;
+	"c") connect ;;  
+	"C") connect ;;
+    "2") disconnect ;;
+	"d") disconnect ;;
+	"D") disconnect ;;
+    "3") showStatus ;;
+	"s") showStatus ;;
+	"S") showStatus ;;
+	"4") configure ;;
+    "q") exit                      ;;
+    "Q") exit   					;; 
+    esac
+done
