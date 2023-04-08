@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 config_path=/home/"$USER"/.config/openvpn.nesto/path.conf
 connect () {
