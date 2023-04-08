@@ -1,7 +1,7 @@
 # OpenVPN3 CLI Tool
 
 ## Install
-- Download the script: `git clone <url>`
+- Download the script: `git clone https://github.com/nesto-software/openvpn-nesto-cli.git`
 - Execute script: `./openvpn-nesto-cli/openvpn-nesto`
 
 ## Usage
