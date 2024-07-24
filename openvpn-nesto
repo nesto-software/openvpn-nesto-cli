@@ -14,7 +14,7 @@ connect () {
 		    connect
 	    fi
     fi 
-    if openvpn3 session-start --config $config_file | grep -q "Session path:"; then
+    if openvpn3 session-start --config $config_file; then
         echo "Connecting...Press (3) to check status "
             echo "------------------------------" 
     else
