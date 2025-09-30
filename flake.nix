@@ -39,7 +39,7 @@
             runHook preInstall
 
             mkdir -p $out/bin
-            cp openvpn-nesto-cli $out/bin/openvpn-nesto-cli
+            cp openvpn-nesto $out/bin/openvpn-nesto-cli
             chmod +x $out/bin/openvpn-nesto-cli
 
             wrapProgram $out/bin/openvpn-nesto-cli \
