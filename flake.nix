@@ -78,6 +78,10 @@
           name = "openvpn-nesto";
         };
 
+        overlays.default = final: prev: {
+          openvpn-nesto-cli = openvpn-nesto-cli;
+        };
+
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
             bash
@@ -95,4 +99,3 @@
       }
     );
 }
-
