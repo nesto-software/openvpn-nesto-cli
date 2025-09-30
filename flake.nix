@@ -39,10 +39,10 @@
             runHook preInstall
 
             mkdir -p $out/bin
-            cp openvpn-nesto $out/bin/openvpn-nesto
-            chmod +x $out/bin/openvpn-nesto
+            cp openvpn-nesto-cli $out/bin/openvpn-nesto-cli
+            chmod +x $out/bin/openvpn-nesto-cli
 
-            wrapProgram $out/bin/openvpn-nesto \
+            wrapProgram $out/bin/openvpn-nesto-cli \
               --prefix PATH : ${
                 pkgs.lib.makeBinPath [
                   pkgs.openvpn3
@@ -65,7 +65,7 @@
             license = licenses.mit;
             maintainers = [ ];
             platforms = platforms.linux;
-            mainProgram = "openvpn-nesto";
+            mainProgram = "openvpn-nesto-cli";
           };
         };
       in
@@ -75,7 +75,7 @@
 
         apps.default = flake-utils.lib.mkApp {
           drv = openvpn-nesto-cli;
-          name = "openvpn-nesto";
+          name = "openvpn-nesto-cli";
         };
 
         overlays.default = final: prev: {
@@ -93,7 +93,7 @@
 
           shellHook = ''
             echo "OpenVPN Nesto CLI development environment"
-            echo "Run './openvpn-nesto' to test the script"
+            echo "Run './openvpn-nesto-cli' to test the script"
           '';
         };
       }
