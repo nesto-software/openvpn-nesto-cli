@@ -68,6 +68,7 @@
 
         apps.default = flake-utils.lib.mkApp {
           drv = openvpn-nesto-cli;
+          name = "openvpn-nesto";
         };
 
         devShells.default = pkgs.mkShell {
