@@ -6,11 +6,17 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (system:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      flake-utils,
+    }:
+    flake-utils.lib.eachDefaultSystem (
+      system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-        
+
         openvpn-nesto-cli = pkgs.stdenv.mkDerivation rec {
           pname = "openvpn-nesto-cli";
           version = "1.0.0";
@@ -31,20 +37,21 @@
 
           installPhase = ''
             runHook preInstall
-            
+
             mkdir -p $out/bin
             cp openvpn-nesto $out/bin/openvpn-nesto
             chmod +x $out/bin/openvpn-nesto
-            
-            # Wrap the script to ensure dependencies are in PATH
+
             wrapProgram $out/bin/openvpn-nesto \
-              --prefix PATH : ${pkgs.lib.makeBinPath [ 
-                pkgs.openvpn3 
-                pkgs.gawk 
-                pkgs.gnugrep 
-                pkgs.coreutils 
-              ]}
-            
+              --prefix PATH : ${
+                pkgs.lib.makeBinPath [
+                  pkgs.openvpn3
+                  pkgs.gawk
+                  pkgs.gnugrep
+                  pkgs.coreutils
+                ]
+              }
+
             runHook postInstall
           '';
 
@@ -79,11 +86,13 @@
             gnugrep
             coreutils
           ];
-          
+
           shellHook = ''
             echo "OpenVPN Nesto CLI development environment"
             echo "Run './openvpn-nesto' to test the script"
           '';
         };
-      });
+      }
+    );
 }
+
