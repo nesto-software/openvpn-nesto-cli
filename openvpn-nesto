@@ -14,13 +14,12 @@ connect () {
 		    connect
 	    fi
     fi 
-    if openvpn3 session-start --config $config_file; then
-        echo "Connecting...Press (3) to check status "
-            echo "------------------------------" 
+    if openvpn3 session-start --config "$config_file"; then
+        echo "CONNECTED ✓"
     else
-	    echo "Error, could not connect"
-            echo "------------------------------" 
+        echo "Error, could not connect"
     fi
+    echo "------------------------------"
 }
 
 disconnect () {
